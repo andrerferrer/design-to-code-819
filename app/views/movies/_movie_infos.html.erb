@@ -1,14 +1,20 @@
-<div class="movie-card">
+<div class="movie-card" data-controller='movies-update'>
   <%= image_tag movie.image_url %>
 
-  <div class="movie-infos">
+  <%# if the movie has errors, we will hide the infos and we will display the form %>
+  <div class=" <%= 'd-none' if movie.errors.any? %> movie-infos" data-movies-update-target='infos'>
     <h2 title="<%= movie.title %> (<%= movie.year %>)">
       <%= movie.title %><small>(<%= movie.year %>)</small>
     </h2>
-    <i class="fas fa-pen fa-xs ml-2"></i>
+    <i class="fas fa-pen fa-xs ml-2" data-action='click->movies-update#ninjaBomb'></i>
   </div>
 
-  <%= simple_form_for movie, html: { class: 'd-none' } do |f| -%>
+  <%= simple_form_for movie,
+                      html: { class: movie.errors.any? ? '' : 'd-none' },
+                      data: { 
+                        movies_update_target: 'form',
+                        action: 'submit->movies-update#fetchMovie'
+                      } do |f| -%>
     <%= f.input :title %>
     <%= f.input :year %>
     <%= f.submit "Update movie", class: "btn btn-sm btn-primary btn-block mt-2" %>

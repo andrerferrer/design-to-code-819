@@ -3,12 +3,19 @@
     <div class="col">
       <h1 class="h2 my-3 d-flex justify-content-center">Movies to watch 🍿</h1>
 
-      <div>
-        <%= form_with url: movies_path, method: :get, html: { class: 'mb-4' } do |f| %>
+      <div data-controller='movies-list'>
+        <%= form_with url: movies_path, 
+                      method: :get, 
+                      html: { class: 'mb-4' },
+                      data: { movies_list_target: 'form' } do |f| %>
           <%= f.text_field :query,
                            class: "form-control",
                            placeholder: 'Type a movie title',
-                           value: params[:query]
+                           value: params[:query],
+                           data: { 
+                             action: 'keyup->movies-list#fetchMovies',
+                             movies_list_target: 'input'
+                            }
                            %>
         <% end %>
 
